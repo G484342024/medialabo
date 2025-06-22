@@ -2,7 +2,22 @@
 // 課題3-2 のプログラムはこの関数の中に記述すること
 function print(data) {
 console.log(data);
+console.log(data.list.g1[0].start_time);
+console.log(data.list.g1[0].end_time);
+console.log(data.list.g1[0].service.name);
+console.log(data.list.g1[0].title);
+console.log(data.list.g1[0].subtitle);
+console.log(data.list.g1[0].content);
+console.log(data.list.g1[0].act);
+console.log(data.list.g1[1].start_time);
+console.log(data.list.g1[1].end_time);
+console.log(data.list.g1[1].service.name);
+console.log(data.list.g1[1].title);
+console.log(data.list.g1[1].subtitle);
+console.log(data.list.g1[1].act);
 }
+
+
 
 // 課題5-1 の関数 printDom() はここに記述すること
 function printDom(data) {
