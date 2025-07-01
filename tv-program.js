@@ -25,13 +25,19 @@ function printDom(data) {
 }
 
 // 課題6-1 のイベントハンドラ登録処理は以下に記述
-
-
+document.addEventListener('DOMContentLoaded', function () {
+  const button = document.getElementById('searchButton');
+  button.addEventListener('click', sendRequest);
+});
 
 
 // 課題6-1 のイベントハンドラ sendRequest() の定義
 function sendRequest() {
+  const channel = document.getElementById('channelInput').value.trim();
+  const genre = document.getElementById('genreInput').value.trim();
 
+  console.log("チャンネル:", channel);
+  console.log("ジャンル:", genre);
 }
 
 // 課題6-1: 通信が成功した時の処理は以下に記述
