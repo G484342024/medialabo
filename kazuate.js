@@ -22,12 +22,12 @@ function hantei() {
   
     if( kaisu > 3){
       p2.textContent = "答えは" + kotae + "でした。すでにゲームは終わっています。";
+    }else if(yoso === kotae){
+      p2.textContent = "正解です。 おめでとう！";
+      kaisu = 4;
     }
-    if(yoso === kotae){
-    p2.textContent = "正解です。 おめでとう！";
     
-    kaisu = 4;
-    }
+    
     
   
 
