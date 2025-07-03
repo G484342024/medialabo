@@ -21,8 +21,63 @@ console.log(data.list.g1[1].act);
 
 // 課題5-1 の関数 printDom() はここに記述すること
 function printDom(data) {
+  let div = document.querySelector('div#result');
+  let h = document.createElement('h2');
+  h.textContent = '検索結果1件目';
+  div.insertAdjacentElement('afterend',h);
 
+  let ul = document.createElement('ul');
+  let li = document.createElement('li');
+  li.textContent = '開始時刻:' + data.list.g1[0].start_time;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = '終了時刻:' + data.list.g1[0].end_time;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = 'チャンネル:' + data.list.g1[0].service.name;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = 'タイトル:' + data.list.g1[0].title;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = 'サブタイトル:' + data.list.g1[0].subtitle;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = '番組説明:' + data.list.g1[0].content;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = '出演者:' + data.list.g1[0].act;
+  ul.insertAdjacentElement('beforeend',li);
+  h.insertAdjacentElement('afterend',ul);
+
+  h2 = document.createElement('h2');
+  h2.textContent = '検索結果2件目';
+  ul.insertAdjacentElement('afterend',h2);
+  ul = document.createElement('ul');
+  li = document.createElement('li');
+  li.textContent = '開始時刻:' + data.list.g1[1].start_time;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = '終了時刻:' + data.list.g1[1].end_time;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = 'チャンネル:' + data.list.g1[1].service.name;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = 'タイトル:' + data.list.g1[1].title;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = 'サブタイトル:' + data.list.g1[1].subtitle;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = '番組説明:' + data.list.g1[1].content;
+  ul.insertAdjacentElement('beforeend',li);
+  li = document.createElement('li');
+  li.textContent = '出演者:' + data.list.g1[1].act;
+  ul.insertAdjacentElement('beforeend',li);
+  h2.insertAdjacentElement('afterend',ul);
 }
+
 
 // 課題6-1 のイベントハンドラ登録処理は以下に記述
 document.addEventListener('DOMContentLoaded', function () {
