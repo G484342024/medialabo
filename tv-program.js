@@ -22,39 +22,56 @@ console.log(data.list.g1[1].act);
 // 課題5-1 の関数 printDom() はここに記述すること
 function printDom(data) {
   const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = ''; 
+  resultDiv.innerHTML = '';
 
-  if (!data.list || !data.list.g1 || data.list.g1.length === 0) {
+  if (!data || !data.list || data.list === null) {
     resultDiv.textContent = '番組データが見つかりませんでした。';
     return;
   }
+  const channels = ['g1', 'e1']; 
 
-  data.list.g1.forEach((program, index) => {
-    const h2 = document.createElement('h2');
-    h2.textContent = `検索結果 ${index + 1} 件目`;
-    resultDiv.appendChild(h2);
+  let found = false;
 
-    const ul = document.createElement('ul');
+  channels.forEach(channel => {
+    const programs = data.list[channel];
 
-    const items = [
-      `開始時刻: ${program.start_time}`,
-      `終了時刻: ${program.end_time}`,
-      `チャンネル: ${program.service.name}`,
-      `タイトル: ${program.title}`,
-      `サブタイトル: ${program.subtitle}`,
-      `番組説明: ${program.content}`,
-      `出演者: ${program.act}`
-    ];
+   if (!Array.isArray(programs) || programs.length === 0) {
+      return; 
+    }
 
-    items.forEach(text => {
-      const li = document.createElement('li');
-      li.textContent = text;
-      ul.appendChild(li);
+    found = true;
+
+    programs.forEach((program, index) => {
+      const h2 = document.createElement('h2');
+      h2.textContent = `【${channel}】検索結果 ${index + 1} 件目`;
+      resultDiv.appendChild(h2);
+
+      const ul = document.createElement('ul');
+
+      const items = [
+        `開始時刻: ${program.start_time}`,
+        `終了時刻: ${program.end_time}`,
+        `チャンネル: ${program.service.name}`,
+        `タイトル: ${program.title}`,
+        `サブタイトル: ${program.subtitle ?? '（なし）'}`,
+        `番組説明: ${program.content ?? '（なし）'}`,
+        `出演者: ${program.act ?? '（情報なし）'}`
+      ];
+
+      items.forEach(text => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        ul.appendChild(li);
+      });
+
+      resultDiv.appendChild(ul);
     });
-
-    resultDiv.appendChild(ul);
   });
+
+  
 }
+
+  
 
 
 // 課題6-1 のイベントハンドラ登録処理は以下に記述
