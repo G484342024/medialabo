@@ -21,61 +21,39 @@ console.log(data.list.g1[1].act);
 
 // 課題5-1 の関数 printDom() はここに記述すること
 function printDom(data) {
-  let div = document.querySelector('div#result');
-  let h = document.createElement('h2');
-  h.textContent = '検索結果1件目';
-  div.insertAdjacentElement('afterend',h);
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = ''; 
 
-  let ul = document.createElement('ul');
-  let li = document.createElement('li');
-  li.textContent = '開始時刻:' + data.list.g1[0].start_time;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = '終了時刻:' + data.list.g1[0].end_time;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = 'チャンネル:' + data.list.g1[0].service.name;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = 'タイトル:' + data.list.g1[0].title;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = 'サブタイトル:' + data.list.g1[0].subtitle;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = '番組説明:' + data.list.g1[0].content;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = '出演者:' + data.list.g1[0].act;
-  ul.insertAdjacentElement('beforeend',li);
-  h.insertAdjacentElement('afterend',ul);
+  if (!data.list || !data.list.g1 || data.list.g1.length === 0) {
+    resultDiv.textContent = '番組データが見つかりませんでした。';
+    return;
+  }
 
-  h2 = document.createElement('h2');
-  h2.textContent = '検索結果2件目';
-  ul.insertAdjacentElement('afterend',h2);
-  ul = document.createElement('ul');
-  li = document.createElement('li');
-  li.textContent = '開始時刻:' + data.list.g1[1].start_time;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = '終了時刻:' + data.list.g1[1].end_time;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = 'チャンネル:' + data.list.g1[1].service.name;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = 'タイトル:' + data.list.g1[1].title;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = 'サブタイトル:' + data.list.g1[1].subtitle;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = '番組説明:' + data.list.g1[1].content;
-  ul.insertAdjacentElement('beforeend',li);
-  li = document.createElement('li');
-  li.textContent = '出演者:' + data.list.g1[1].act;
-  ul.insertAdjacentElement('beforeend',li);
-  h2.insertAdjacentElement('afterend',ul);
+  data.list.g1.forEach((program, index) => {
+    const h2 = document.createElement('h2');
+    h2.textContent = `検索結果 ${index + 1} 件目`;
+    resultDiv.appendChild(h2);
+
+    const ul = document.createElement('ul');
+
+    const items = [
+      `開始時刻: ${program.start_time}`,
+      `終了時刻: ${program.end_time}`,
+      `チャンネル: ${program.service.name}`,
+      `タイトル: ${program.title}`,
+      `サブタイトル: ${program.subtitle}`,
+      `番組説明: ${program.content}`,
+      `出演者: ${program.act}`
+    ];
+
+    items.forEach(text => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      ul.appendChild(li);
+    });
+
+    resultDiv.appendChild(ul);
+  });
 }
 
 
@@ -88,15 +66,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // 課題6-1 のイベントハンドラ sendRequest() の定義
 function sendRequest() {
-  const channel = document.getElementById('channelInput').value.trim();
-  const genre = document.getElementById('genreInput').value.trim();
+  const service = document.getElementById('serviceInput').value;
+  const genre = document.getElementById('genreInput').value;
 
-  console.log("チャンネル:", channel);
+  const url = `https://www.nishita-lab.org/web-contents/jsons/nhk/${service}-${genre}-j.json`;
+
+  axios.get(url)
+        .then(showResult)   
+        .catch(showError)   
+        .then(finish);     
+
+  console.log("チャンネル:", service);
   console.log("ジャンル:", genre);
 }
 
 // 課題6-1: 通信が成功した時の処理は以下に記述
 function showResult(resp) {
+   let data = resp.data;
+
+    // data が文字列型なら，オブジェクトに変換する
+    if (typeof data === 'string') {
+        data = JSON.parse(data);
+    }
+    printDom(data);
 
 }
 
