@@ -21,92 +21,90 @@ console.log(data.list.g1[1].act);
 
 // 課題5-1 の関数 printDom() はここに記述すること
 function printDom(data) {
-  const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = '';
+  let result = document.querySelector('#result');
+  result.innerHTML = ''; 
 
-  if (!data || !data.list || data.list === null) {
-    resultDiv.textContent = '番組データが見つかりませんでした。';
+  let list = data.list;
+  if (!list) {
+    result.textContent = '番組データが見つかりませんでした。';
     return;
   }
-  const channels = ['g1', 'e1']; 
 
-  let found = false;
+  let programs = list.g1 || list.e1;
+  if (!programs || programs.length === 0) {
+    result.textContent = '該当する番組は見つかりませんでした。';
+    return;
+  }
 
-  channels.forEach(channel => {
-    const programs = data.list[channel];
+  for (let i = 0; i < programs.length; i++) {
+    let program = programs[i];
 
-   if (!Array.isArray(programs) || programs.length === 0) {
-      return; 
-    }
+    let div = document.createElement('div');
 
-    found = true;
+    let title = document.createElement('h2');
+    title.textContent = program.title;
+    div.appendChild(title);
 
-    programs.forEach((program, index) => {
-      const h2 = document.createElement('h2');
-      h2.textContent = `【${channel}】検索結果 ${index + 1} 件目`;
-      resultDiv.appendChild(h2);
+    let ul = document.createElement('ul');
 
-      const ul = document.createElement('ul');
+    let li1 = document.createElement('li');
+    li1.textContent = 'サブタイトル: ' + (program.subtitle || 'なし');
+    ul.appendChild(li1);
 
-      const items = [
-        `開始時刻: ${program.start_time}`,
-        `終了時刻: ${program.end_time}`,
-        `チャンネル: ${program.service.name}`,
-        `タイトル: ${program.title}`,
-        `サブタイトル: ${program.subtitle ?? '（なし）'}`,
-        `番組説明: ${program.content ?? '（なし）'}`,
-        `出演者: ${program.act ?? '（情報なし）'}`
-      ];
+    let li2 = document.createElement('li');
+    li2.textContent = 'チャンネル: ' + (program.service?.name || '不明');
+    ul.appendChild(li2);
 
-      items.forEach(text => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        ul.appendChild(li);
-      });
+    let li3 = document.createElement('li');
+    li3.textContent = '開始時刻: ' + program.start_time;
+    ul.appendChild(li3);
 
-      resultDiv.appendChild(ul);
-    });
-  });
+    let li4 = document.createElement('li');
+    li4.textContent = '終了時刻: ' + program.end_time;
+    ul.appendChild(li4);
 
-  
+    let li5 = document.createElement('li');
+    li5.textContent = '番組説明: ' + (program.content || 'なし');
+    ul.appendChild(li5);
+
+    let li6 = document.createElement('li');
+    li6.textContent = '出演者: ' + (program.act || 'なし');
+    ul.appendChild(li6);
+
+    div.appendChild(ul);
+    result.appendChild(div);
+  }
 }
+
 
   
 
 
 // 課題6-1 のイベントハンドラ登録処理は以下に記述
-document.addEventListener('DOMContentLoaded', function () {
-  const button = document.getElementById('searchButton');
-  button.addEventListener('click', sendRequest);
-});
+let button = document.querySelector('#searchButton');
+button.addEventListener('click', sendRequest);
+
 
 
 // 課題6-1 のイベントハンドラ sendRequest() の定義
 function sendRequest() {
-  const service = document.getElementById('serviceInput').value;
-  const genre = document.getElementById('genreInput').value;
-
-  const url = `https://www.nishita-lab.org/web-contents/jsons/nhk/${service}-${genre}-j.json`;
+  let service = document.querySelector('#serviceInput').value;
+  let genre = document.querySelector('#genreInput').value;
+  let url = `https://www.nishita-lab.org/web-contents/jsons/nhk/${service}-${genre}-j.json`;
 
   axios.get(url)
-        .then(showResult)   
-        .catch(showError)   
-        .then(finish);     
-
-  console.log("チャンネル:", service);
-  console.log("ジャンル:", genre);
+    .then(showResult)
+    .catch(showError)
+    .then(finish);
 }
 
 // 課題6-1: 通信が成功した時の処理は以下に記述
 function showResult(resp) {
-   let data = resp.data;
-
-    // data が文字列型なら，オブジェクトに変換する
-    if (typeof data === 'string') {
-        data = JSON.parse(data);
-    }
-    printDom(data);
-
+  let data = resp.data;
+  if (typeof data === 'string') {
+    data = JSON.parse(data);
+  }
+  printDom(data);
 }
 
 // 課題6-1: 通信エラーが発生した時の処理
